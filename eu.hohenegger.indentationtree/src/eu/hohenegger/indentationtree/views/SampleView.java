@@ -163,49 +163,9 @@ public class SampleView {
 			return;
 		}
 
-		// TODO: remove commented code or use it to update view on document
-		// change.
-		// document.addDocumentListener(new IDocumentListener() {
-		//
-		// @Override
-		// public void documentChanged(DocumentEvent event) {
-		// // System.out.println(event);
-		// }
-		//
-		// @Override
-		// public void documentAboutToBeChanged(DocumentEvent event) {
-		// }
-		// });
-
 		Level topLevel = parse(currentDocument);
 
 		setInput(topLevel);
-
-		// TODO: remove commented code or sync editor selection with view.
-		// editorListener = new ISelectionChangedListener() {
-		// @Override
-		// public void selectionChanged(SelectionChangedEvent event) {
-		// TextSelection selection = (TextSelection) event.getSelection();
-		// TreeIterator<EObject> eAllContents =
-		// root.getTopLevel().eAllContents();
-		// while (eAllContents.hasNext()) {
-		// EObject eObject = eAllContents.next();
-		// if (eObject instanceof Level) {
-		// Level level = (Level) eObject;
-		// if (level.getLineNumber() == selection.getStartLine()) {
-		// treeViewer.setRedraw(false);
-		// treeViewer.getViewer().getControl().setEnabled(false);
-		// treeViewer.getViewer().setSelection(new TreeSelection(new
-		// TreePath(new Object[] {level} )), true);
-		// treeViewer.getViewer().getControl().setEnabled(true);
-		// treeViewer.setRedraw(true);
-		// }
-		// }
-		// }
-		// }
-		// };
-		// TODO: remove listener when part is switched
-		// textEditor.getSelectionProvider().addSelectionChangedListener(editorListener);
 	}
 	
 	public void editorDeActivated(IEditorPart editor) {
