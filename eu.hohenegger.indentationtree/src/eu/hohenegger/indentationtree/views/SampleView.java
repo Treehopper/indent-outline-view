@@ -16,6 +16,8 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.e4.core.di.extensions.Preference;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.services.IServiceConstants;
@@ -36,6 +38,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.internal.e4.compatibility.CompatibilityEditor;
+import org.eclipse.ui.texteditor.AbstractDecoratedTextEditorPreferenceConstants;
 import org.eclipse.ui.texteditor.AbstractTextEditor;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.IElementStateListener;
@@ -49,13 +52,14 @@ import eu.hohenegger.indentationtree.parsermodel.ParsermodelPackage;
 @SuppressWarnings("restriction")
 public class SampleView {
 
-	private Pattern pattern = Pattern.compile("^ *");
+	private Pattern tabsOrSpaces = Pattern.compile("^(\\s|\\t)*");
 	private EMFContainmentTreeTable treeViewer;
 	private ContainmentRoot root;
 	private AbstractTextEditor currentTextEditor;
 	private IDocument currentDocument;
 	private IElementStateListener currentEditorStateListener;
 	private MPart currentEditorPart;
+	private int tabWidth;
 	
 	@Inject 
 	private EPartService partService;
@@ -175,8 +179,18 @@ public class SampleView {
 		currentTextEditor.getDocumentProvider().removeElementStateListener(currentEditorStateListener);
 		treeViewer.getViewer().setInput(null);
 	}
+	
+	@Inject
+	public void setTabWidth(@Preference(nodePath = "org.eclipse.ui.editors.general") IEclipsePreferences prefs) {
+		tabWidth = prefs.getInt(AbstractDecoratedTextEditorPreferenceConstants.EDITOR_TAB_WIDTH, 4);
+	}
 
 	private Level parse(IDocument document) {
+		String spaceTab = "";
+		for (int i = 0; i < tabWidth; i++) {
+			spaceTab = spaceTab + " ";
+		}
+		
 		root = ParsermodelFactory.eINSTANCE.createContainmentRoot();
 		root.setTopLevel(ParsermodelFactory.eINSTANCE.createLevel());
 
@@ -196,10 +210,10 @@ public class SampleView {
 				String string = document.get(lineInformation.getOffset(),
 						lineInformation.getLength());
 
-				Matcher matcher = pattern.matcher(string);
+				Matcher matcher = tabsOrSpaces.matcher(string);
 				matcher.find();
 				String group = matcher.group();
-				levelCount = group.length();
+				levelCount = group.replaceAll("\\t", spaceTab).length();
 				string = matcher.replaceFirst("");
 
 				newSubLevel.setContent(string);
