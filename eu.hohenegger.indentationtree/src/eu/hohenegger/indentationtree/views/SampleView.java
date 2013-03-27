@@ -169,9 +169,7 @@ public class SampleView {
 			return;
 		}
 
-		long currentTimeMillis = System.currentTimeMillis();
 		Level topLevel = parse(currentDocument);
-		System.out.println(System.currentTimeMillis() - currentTimeMillis);
 
 		setInput(topLevel);
 	}
