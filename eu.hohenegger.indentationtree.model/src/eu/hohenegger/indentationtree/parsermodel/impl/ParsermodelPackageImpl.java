@@ -178,6 +178,15 @@ public class ParsermodelPackageImpl extends EPackageImpl implements ParsermodelP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getLevel_IndentLength() {
+		return (EAttribute)levelEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public ParsermodelFactory getParsermodelFactory() {
 		return (ParsermodelFactory)getEFactoryInstance();
 	}
@@ -209,6 +218,7 @@ public class ParsermodelPackageImpl extends EPackageImpl implements ParsermodelP
 		createEReference(levelEClass, LEVEL__PARENT);
 		createEReference(levelEClass, LEVEL__SUB_LEVEL);
 		createEAttribute(levelEClass, LEVEL__LINE_NUMBER);
+		createEAttribute(levelEClass, LEVEL__INDENT_LENGTH);
 	}
 
 	/**
@@ -249,6 +259,7 @@ public class ParsermodelPackageImpl extends EPackageImpl implements ParsermodelP
 		initEReference(getLevel_Parent(), this.getLevel(), this.getLevel_SubLevel(), "parent", null, 0, 1, Level.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getLevel_SubLevel(), this.getLevel(), this.getLevel_Parent(), "subLevel", null, 0, -1, Level.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getLevel_LineNumber(), ecorePackage.getEInt(), "lineNumber", null, 0, 1, Level.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getLevel_IndentLength(), ecorePackage.getEInt(), "indentLength", null, 0, 1, Level.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);

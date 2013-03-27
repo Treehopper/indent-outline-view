@@ -25,6 +25,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link eu.hohenegger.indentationtree.parsermodel.Level#getParent <em>Parent</em>}</li>
  *   <li>{@link eu.hohenegger.indentationtree.parsermodel.Level#getSubLevel <em>Sub Level</em>}</li>
  *   <li>{@link eu.hohenegger.indentationtree.parsermodel.Level#getLineNumber <em>Line Number</em>}</li>
+ *   <li>{@link eu.hohenegger.indentationtree.parsermodel.Level#getIndentLength <em>Indent Length</em>}</li>
  * </ul>
  * </p>
  *
@@ -137,5 +138,31 @@ public interface Level extends EObject {
 	 * @generated
 	 */
 	void setLineNumber(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Indent Length</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Indent Length</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Indent Length</em>' attribute.
+	 * @see #setIndentLength(int)
+	 * @see eu.hohenegger.indentationtree.parsermodel.ParsermodelPackage#getLevel_IndentLength()
+	 * @model
+	 * @generated
+	 */
+	int getIndentLength();
+
+	/**
+	 * Sets the value of the '{@link eu.hohenegger.indentationtree.parsermodel.Level#getIndentLength <em>Indent Length</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Indent Length</em>' attribute.
+	 * @see #getIndentLength()
+	 * @generated
+	 */
+	void setIndentLength(int value);
 
 } // Level

@@ -9,6 +9,8 @@
  ******************************************************************************/
 package eu.hohenegger.indentationtree.views;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -167,7 +169,9 @@ public class SampleView {
 			return;
 		}
 
+		long currentTimeMillis = System.currentTimeMillis();
 		Level topLevel = parse(currentDocument);
+		System.out.println(System.currentTimeMillis() - currentTimeMillis);
 
 		setInput(topLevel);
 	}
@@ -185,24 +189,56 @@ public class SampleView {
 		tabWidth = prefs.getInt(AbstractDecoratedTextEditorPreferenceConstants.EDITOR_TAB_WIDTH, 4);
 	}
 
-	private Level parse(IDocument document) {
+	private String translateTabsToSpaces() {
 		String spaceTab = "";
 		for (int i = 0; i < tabWidth; i++) {
 			spaceTab = spaceTab + " ";
 		}
+		return spaceTab;
+	}
+	
+	static final Map<String, IndentTuple> lineToIndentLength = new HashMap<>();
+	private class IndentTuple {
+		int indentLevel;
+		String content;
+		
+		
+		public IndentTuple(String string, String spaceTab) {
+			IndentTuple cachedIndentTuple = lineToIndentLength.get(string);
+			if (cachedIndentTuple != null) {
+				indentLevel = cachedIndentTuple.indentLevel;
+				content = cachedIndentTuple.content;
+				
+				return;
+			}
+			
+			Matcher matcher = tabsOrSpaces.matcher(string);
+			matcher.find();
+			String group = matcher.group();
+			
+			indentLevel = group.replaceAll("\\t", spaceTab).length();
+			content = matcher.replaceFirst("");
+			
+			lineToIndentLength.put(string, this);
+		}
+	}
+	
+	private Level parse(IDocument document) {
+		String spaceTab = translateTabsToSpaces();
 		
 		root = ParsermodelFactory.eINSTANCE.createContainmentRoot();
 		root.setTopLevel(ParsermodelFactory.eINSTANCE.createLevel());
 
 		Level currentLevel = root.getTopLevel();
+		currentLevel.setIndentLength(-1);
 
-		int oldLevelCount = -1;
 		int numberOfLines = document.getNumberOfLines();
 		Level previouslyAddedLevel = root.getTopLevel();
 		Level newSubLevel;
-		int levelCount = -1;
 
 		for (int i = 0; i < numberOfLines; i++) {
+			Level tmpLevel = previouslyAddedLevel;
+			
 			IRegion lineInformation;
 			newSubLevel = ParsermodelFactory.eINSTANCE.createLevel();
 			try {
@@ -210,37 +246,38 @@ public class SampleView {
 				String string = document.get(lineInformation.getOffset(),
 						lineInformation.getLength());
 
-				Matcher matcher = tabsOrSpaces.matcher(string);
-				matcher.find();
-				String group = matcher.group();
-				levelCount = group.replaceAll("\\t", spaceTab).length();
-				string = matcher.replaceFirst("");
+				IndentTuple indentTuple = new IndentTuple(string, spaceTab);
+				newSubLevel.setIndentLength(indentTuple.indentLevel);
+				string = /*newSubLevel.getIndentLength() + " " +*/ indentTuple.content;
 
 				newSubLevel.setContent(string);
 				newSubLevel.setLineNumber(i);
-				if (oldLevelCount < levelCount) {
-					previouslyAddedLevel.getSubLevel().add(newSubLevel);
-				} else if (oldLevelCount == levelCount) {
-					previouslyAddedLevel.getParent().getSubLevel()
-							.add(newSubLevel);
-				} else {
+				if (previouslyAddedLevel.getIndentLength() == newSubLevel.getIndentLength()) {
+					tmpLevel = previouslyAddedLevel.getParent();
+				} else if (previouslyAddedLevel.getIndentLength() > newSubLevel.getIndentLength()) {
 					currentLevel = previouslyAddedLevel;
-					int diff = oldLevelCount - levelCount;
-					for (int j = 0; j < diff + 1; j++) {
-						if (currentLevel.getParent() == null) {
+					int diff = previouslyAddedLevel.getIndentLength() - newSubLevel.getIndentLength();
+					
+					int j = 0;
+					while (j <= diff) {
+						Level parentLevel = currentLevel.getParent();
+						if (parentLevel == null) {
 							break;
 						}
-						currentLevel = currentLevel.getParent();
+						j = j + (currentLevel.getIndentLength() - parentLevel.getIndentLength());
+						
+						currentLevel = parentLevel;
 					}
-					currentLevel.getSubLevel().add(newSubLevel);
+					
+					tmpLevel = currentLevel;
 				}
 
 			} catch (BadLocationException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			tmpLevel.getSubLevel().add(newSubLevel);
 
-			oldLevelCount = levelCount;
 			previouslyAddedLevel = newSubLevel;
 		}
 

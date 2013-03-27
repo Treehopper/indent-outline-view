@@ -40,6 +40,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link eu.hohenegger.indentationtree.parsermodel.impl.LevelImpl#getParent <em>Parent</em>}</li>
  *   <li>{@link eu.hohenegger.indentationtree.parsermodel.impl.LevelImpl#getSubLevel <em>Sub Level</em>}</li>
  *   <li>{@link eu.hohenegger.indentationtree.parsermodel.impl.LevelImpl#getLineNumber <em>Line Number</em>}</li>
+ *   <li>{@link eu.hohenegger.indentationtree.parsermodel.impl.LevelImpl#getIndentLength <em>Indent Length</em>}</li>
  * </ul>
  * </p>
  *
@@ -102,6 +103,26 @@ public class LevelImpl extends EObjectImpl implements Level {
 	 * @ordered
 	 */
 	protected int lineNumber = LINE_NUMBER_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getIndentLength() <em>Indent Length</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getIndentLength()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int INDENT_LENGTH_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getIndentLength() <em>Indent Length</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getIndentLength()
+	 * @generated
+	 * @ordered
+	 */
+	protected int indentLength = INDENT_LENGTH_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -222,6 +243,27 @@ public class LevelImpl extends EObjectImpl implements Level {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public int getIndentLength() {
+		return indentLength;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setIndentLength(int newIndentLength) {
+		int oldIndentLength = indentLength;
+		indentLength = newIndentLength;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ParsermodelPackage.LEVEL__INDENT_LENGTH, oldIndentLength, indentLength));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
@@ -282,6 +324,8 @@ public class LevelImpl extends EObjectImpl implements Level {
 				return getSubLevel();
 			case ParsermodelPackage.LEVEL__LINE_NUMBER:
 				return getLineNumber();
+			case ParsermodelPackage.LEVEL__INDENT_LENGTH:
+				return getIndentLength();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -308,6 +352,9 @@ public class LevelImpl extends EObjectImpl implements Level {
 			case ParsermodelPackage.LEVEL__LINE_NUMBER:
 				setLineNumber((Integer)newValue);
 				return;
+			case ParsermodelPackage.LEVEL__INDENT_LENGTH:
+				setIndentLength((Integer)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -332,6 +379,9 @@ public class LevelImpl extends EObjectImpl implements Level {
 			case ParsermodelPackage.LEVEL__LINE_NUMBER:
 				setLineNumber(LINE_NUMBER_EDEFAULT);
 				return;
+			case ParsermodelPackage.LEVEL__INDENT_LENGTH:
+				setIndentLength(INDENT_LENGTH_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -352,6 +402,8 @@ public class LevelImpl extends EObjectImpl implements Level {
 				return subLevel != null && !subLevel.isEmpty();
 			case ParsermodelPackage.LEVEL__LINE_NUMBER:
 				return lineNumber != LINE_NUMBER_EDEFAULT;
+			case ParsermodelPackage.LEVEL__INDENT_LENGTH:
+				return indentLength != INDENT_LENGTH_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -370,6 +422,8 @@ public class LevelImpl extends EObjectImpl implements Level {
 		result.append(content);
 		result.append(", lineNumber: ");
 		result.append(lineNumber);
+		result.append(", indentLength: ");
+		result.append(indentLength);
 		result.append(')');
 		return result.toString();
 	}

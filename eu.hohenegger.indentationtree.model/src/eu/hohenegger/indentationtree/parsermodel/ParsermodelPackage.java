@@ -144,13 +144,22 @@ public interface ParsermodelPackage extends EPackage {
 	int LEVEL__LINE_NUMBER = 3;
 
 	/**
+	 * The feature id for the '<em><b>Indent Length</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LEVEL__INDENT_LENGTH = 4;
+
+	/**
 	 * The number of structural features of the '<em>Level</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LEVEL_FEATURE_COUNT = 4;
+	int LEVEL_FEATURE_COUNT = 5;
 
 
 	/**
@@ -227,6 +236,17 @@ public interface ParsermodelPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getLevel_LineNumber();
+
+	/**
+	 * Returns the meta object for the attribute '{@link eu.hohenegger.indentationtree.parsermodel.Level#getIndentLength <em>Indent Length</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Indent Length</em>'.
+	 * @see eu.hohenegger.indentationtree.parsermodel.Level#getIndentLength()
+	 * @see #getLevel()
+	 * @generated
+	 */
+	EAttribute getLevel_IndentLength();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -309,6 +329,14 @@ public interface ParsermodelPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute LEVEL__LINE_NUMBER = eINSTANCE.getLevel_LineNumber();
+
+		/**
+		 * The meta object literal for the '<em><b>Indent Length</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute LEVEL__INDENT_LENGTH = eINSTANCE.getLevel_IndentLength();
 
 	}
 

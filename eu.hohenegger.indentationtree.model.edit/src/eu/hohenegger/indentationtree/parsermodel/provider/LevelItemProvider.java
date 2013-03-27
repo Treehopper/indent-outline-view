@@ -79,6 +79,7 @@ public class LevelItemProvider
 
 			addContentPropertyDescriptor(object);
 			addLineNumberPropertyDescriptor(object);
+			addIndentLengthPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -119,6 +120,28 @@ public class LevelItemProvider
 				 getString("_UI_Level_lineNumber_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_Level_lineNumber_feature", "_UI_Level_type"),
 				 ParsermodelPackage.Literals.LEVEL__LINE_NUMBER,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Indent Length feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addIndentLengthPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Level_indentLength_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Level_indentLength_feature", "_UI_Level_type"),
+				 ParsermodelPackage.Literals.LEVEL__INDENT_LENGTH,
 				 true,
 				 false,
 				 false,
@@ -196,6 +219,7 @@ public class LevelItemProvider
 		switch (notification.getFeatureID(Level.class)) {
 			case ParsermodelPackage.LEVEL__CONTENT:
 			case ParsermodelPackage.LEVEL__LINE_NUMBER:
+			case ParsermodelPackage.LEVEL__INDENT_LENGTH:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case ParsermodelPackage.LEVEL__SUB_LEVEL:
