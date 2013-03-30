@@ -13,6 +13,6 @@ public interface IPartController {
 	void setView(SampleView sampleView);
 
 	int getTabWidth();
-	
+
 	boolean isEmptyLineSkipped();
 }

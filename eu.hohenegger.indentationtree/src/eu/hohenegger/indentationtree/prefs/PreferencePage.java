@@ -17,21 +17,21 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 import eu.hohenegger.indentationtree.Activator;
 
 public class PreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
-    public static final String EDITOR_FILTER_EMPTY_LINES = "EDITOR_FILTER_EMPTY_LINES";
+	public static final String EDITOR_FILTER_EMPTY_LINES = "EDITOR_FILTER_EMPTY_LINES";
 
 	public PreferencePage() {
-        super(GRID);
-    }
+		super(GRID);
+	}
 
-    @Override
-    public void createFieldEditors() {
-        addField(new BooleanFieldEditor(EDITOR_FILTER_EMPTY_LINES, "&Filter empty lines.", getFieldEditorParent()));
-    }
+	@Override
+	public void createFieldEditors() {
+		addField(new BooleanFieldEditor(EDITOR_FILTER_EMPTY_LINES, "&Filter empty lines.", getFieldEditorParent()));
+	}
 
-    @Override
-    public void init(IWorkbench workbench) {
-        setPreferenceStore(Activator.getDefault().getPreferenceStore());
-        setDescription("Indent Outline Preferences");
-    }
+	@Override
+	public void init(IWorkbench workbench) {
+		setPreferenceStore(Activator.getDefault().getPreferenceStore());
+		setDescription("Indent Outline Preferences");
+	}
 
 }

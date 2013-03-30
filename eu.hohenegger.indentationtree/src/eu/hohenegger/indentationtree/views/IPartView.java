@@ -11,5 +11,6 @@ package eu.hohenegger.indentationtree.views;
 
 public interface IPartView {
 	IPartController getController();
+
 	void refreshInput();
 }

@@ -51,36 +51,37 @@ public abstract class DIViewPart<T extends IPartView> extends ViewPart {
 	@Override
 	public void init(IViewSite site) throws PartInitException {
 		super.init(site);
-		
+
 		IEclipseContext parentContext = (IEclipseContext) getSite().getService(IEclipseContext.class);
-		if( parentContext.get("org.eclipse.e4.ui.workbench.IPresentationEngine") != null ) {
-				Class<?> clazz;
-				try {
-					clazz = getBundleWithNoInstallState("org.eclipse.e4.ui.model.workbench").loadClass("org.eclipse.e4.ui.model.application.ui.basic.MPart");
-					Object instance = getSite().getService(clazz);
-					Method m = clazz.getMethod("getContext", new Class[0]);
-					ctx = (IEclipseContext) m.invoke(instance);
-					context = ctx.createChild();
-				} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+		if (parentContext.get("org.eclipse.e4.ui.workbench.IPresentationEngine") != null) {
+			Class<?> clazz;
+			try {
+				clazz = getBundleWithNoInstallState("org.eclipse.e4.ui.model.workbench").loadClass(
+						"org.eclipse.e4.ui.model.application.ui.basic.MPart");
+				Object instance = getSite().getService(clazz);
+				Method m = clazz.getMethod("getContext", new Class[0]);
+				ctx = (IEclipseContext) m.invoke(instance);
+				context = ctx.createChild();
+			} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | IllegalAccessException
+					| IllegalArgumentException | InvocationTargetException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 
 		context.declareModifiable(IViewPart.class);
 
 		context.set(IViewPart.class, this);
-		
+
 		propertyChangeListener = new IPropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent event) {
 				ContextInjectionFactory.inject(part.getController(), context);
 			}
 		};
-		Activator.getDefault().getPreferenceStore().addPropertyChangeListener(propertyChangeListener); 
+		Activator.getDefault().getPreferenceStore().addPropertyChangeListener(propertyChangeListener);
 	}
 
-	
 	@Override
 	public void dispose() {
 		Activator.getDefault().getPreferenceStore().removePropertyChangeListener(propertyChangeListener);
@@ -91,13 +92,10 @@ public abstract class DIViewPart<T extends IPartView> extends ViewPart {
 		Bundle result = null;
 		Bundle bundle = FrameworkUtil.getBundle(DIViewPart.class);
 		BundleContext bundleContext = bundle.getBundleContext();
-		ServiceReference serviceReference = bundle.getBundleContext()
-				.getServiceReference(PackageAdmin.class);
-		PackageAdmin packageAdmin = (PackageAdmin) bundleContext
-				.getService(serviceReference);
+		ServiceReference serviceReference = bundle.getBundleContext().getServiceReference(PackageAdmin.class);
+		PackageAdmin packageAdmin = (PackageAdmin) bundleContext.getService(serviceReference);
 
-		Iterator<Bundle> iterator = emptyIfNull(packageAdmin.getBundles(
-				bundleName, null));
+		Iterator<Bundle> iterator = emptyIfNull(packageAdmin.getBundles(bundleName, null));
 		while (iterator.hasNext()) {
 			Bundle tmpBundle = (Bundle) iterator.next();
 
@@ -114,7 +112,8 @@ public abstract class DIViewPart<T extends IPartView> extends ViewPart {
 	/**
 	 * Creates a null-safe Iterator.
 	 * 
-	 * @param array The array to be iterated over.
+	 * @param array
+	 *            The array to be iterated over.
 	 * @return An UnmodifiableIterator, but never null.
 	 */
 	private static <F> UnmodifiableIterator<F> emptyIfNull(F[] array) {

@@ -16,10 +16,10 @@ import eu.hohenegger.indentationtree.Activator;
 
 public class PreferenceInitializer extends AbstractPreferenceInitializer {
 
-	  @Override
-	  public void initializeDefaultPreferences() {
-	    IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-	    store.setDefault(PreferencePage.EDITOR_FILTER_EMPTY_LINES, true);
-	  }
+	@Override
+	public void initializeDefaultPreferences() {
+		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		store.setDefault(PreferencePage.EDITOR_FILTER_EMPTY_LINES, true);
+	}
 
 }

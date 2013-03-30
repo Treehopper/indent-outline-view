@@ -55,34 +55,33 @@ public class SampleView implements IPartView {
 
 	private Pattern tabsOrSpaces = Pattern.compile("^(\\s|\\t)*");
 	private Pattern emptyLine = Pattern.compile("^$");
-	
+
 	private EMFContainmentTreeTable treeViewer;
 	private ContainmentRoot root;
 	private AbstractTextEditor currentTextEditor;
 	private IDocument currentDocument;
 	private IElementStateListener currentEditorStateListener;
 	private MPart currentEditorPart;
-	
+
 	@Inject
 	private IEclipseContext context;
 	private IPartController controller;
-	
-	@Inject 
+
+	@Inject
 	private EPartService partService;
-	
-	
-	@Inject 
+
+	@Inject
 	public SampleView() {
 		controller = ContextInjectionFactory.make(PartController.class, context);
 		controller.setView(this);
 	}
-	
+
 	@Inject
 	public void setActivePart(@Named(IServiceConstants.ACTIVE_PART) MPart activePart) {
 		if (treeViewer == null || treeViewer.isDisposed()) {
 			return;
 		}
-		
+
 		if (activePart == null) {
 			editorDeActivated(null);
 		} else if (activePart.getObject() instanceof CompatibilityEditor) {
@@ -94,20 +93,15 @@ public class SampleView implements IPartView {
 			editorActivated(compatibilityEditor.getEditor());
 		}
 	}
-	
-	
+
 	@PostConstruct
 	public void createPartControl(Composite parent) {
 		parent.setLayout(new FillLayout());
-		EditingDomain editingDomain = new AdapterFactoryEditingDomain(
-				new ComposedAdapterFactory(
-						ComposedAdapterFactory.Descriptor.Registry.INSTANCE),
-				new BasicCommandStack());
-		treeViewer = new EMFContainmentTreeTable(parent, SWT.NONE,
-				editingDomain);
+		EditingDomain editingDomain = new AdapterFactoryEditingDomain(new ComposedAdapterFactory(
+				ComposedAdapterFactory.Descriptor.Registry.INSTANCE), new BasicCommandStack());
+		treeViewer = new EMFContainmentTreeTable(parent, SWT.NONE, editingDomain);
 
-		treeViewer.createTableViewerColumn("Text",
-				ParsermodelPackage.eINSTANCE.getLevel_Content(), 100);
+		treeViewer.createTableViewerColumn("Text", ParsermodelPackage.eINSTANCE.getLevel_Content(), 100);
 
 		ISelectionChangedListener treeViewerListener = new ISelectionChangedListener() {
 			@Override
@@ -147,7 +141,7 @@ public class SampleView implements IPartView {
 		final IDocument document = documentProvider.getDocument(editorInput);
 		setInput(parse(document));
 	}
-	
+
 	public void editorActivated(IEditorPart activePart) {
 		if (!(activePart instanceof AbstractTextEditor)) {
 			return;
@@ -157,7 +151,7 @@ public class SampleView implements IPartView {
 
 		IEditorInput editorInput = activePart.getEditorInput();
 
-		currentDocument =  currentTextEditor.getDocumentProvider().getDocument(editorInput);
+		currentDocument = currentTextEditor.getDocumentProvider().getDocument(editorInput);
 		currentEditorStateListener = new IElementStateListener() {
 			@Override
 			public void elementMoved(Object originalElement, Object movedElement) {
@@ -183,7 +177,7 @@ public class SampleView implements IPartView {
 			public void elementContentAboutToBeReplaced(Object element) {
 			}
 		};
-		 currentTextEditor.getDocumentProvider().addElementStateListener(currentEditorStateListener);
+		currentTextEditor.getDocumentProvider().addElementStateListener(currentEditorStateListener);
 
 		if (currentDocument == null) {
 			return;
@@ -193,9 +187,10 @@ public class SampleView implements IPartView {
 
 		setInput(topLevel);
 	}
-	
+
 	public void editorDeActivated(IEditorPart editor) {
-		if (currentTextEditor == null || currentTextEditor.getDocumentProvider() == null || treeViewer == null || treeViewer.isDisposed()) {
+		if (currentTextEditor == null || currentTextEditor.getDocumentProvider() == null || treeViewer == null
+				|| treeViewer.isDisposed()) {
 			return;
 		}
 		currentTextEditor.getDocumentProvider().removeElementStateListener(currentEditorStateListener);
@@ -209,36 +204,36 @@ public class SampleView implements IPartView {
 		}
 		return spaceTab;
 	}
-	
+
 	static final Map<String, IndentTuple> lineToIndentLength = new HashMap<>();
+
 	private class IndentTuple {
 		private int indentLevel;
 		private String content;
-		
-		
+
 		public IndentTuple(String string, String spaceTab) {
 			IndentTuple cachedIndentTuple = lineToIndentLength.get(string);
 			if (cachedIndentTuple != null) {
 				indentLevel = cachedIndentTuple.indentLevel;
 				content = cachedIndentTuple.content;
-				
+
 				return;
 			}
-			
+
 			Matcher matcher = tabsOrSpaces.matcher(string);
 			matcher.find();
 			String group = matcher.group();
-			
+
 			indentLevel = group.replaceAll("\\t", spaceTab).length();
 			content = matcher.replaceFirst("");
-			
+
 			lineToIndentLength.put(string, this);
 		}
 	}
-	
+
 	private Level parse(IDocument document) {
 		String spaceTab = translateTabsToSpaces(getController().getTabWidth());
-		
+
 		root = ParsermodelFactory.eINSTANCE.createContainmentRoot();
 		root.setTopLevel(ParsermodelFactory.eINSTANCE.createLevel());
 
@@ -251,14 +246,13 @@ public class SampleView implements IPartView {
 
 		for (int i = 0; i < numberOfLines; i++) {
 			Level tmpLevel = previouslyAddedLevel;
-			
+
 			IRegion lineInformation;
 			newSubLevel = ParsermodelFactory.eINSTANCE.createLevel();
 			try {
 				lineInformation = document.getLineInformation(i);
-				String string = document.get(lineInformation.getOffset(),
-						lineInformation.getLength());
-				
+				String string = document.get(lineInformation.getOffset(), lineInformation.getLength());
+
 				if (getController().isEmptyLineSkipped() && emptyLine.matcher(string).matches()) {
 					continue;
 				}
@@ -274,7 +268,7 @@ public class SampleView implements IPartView {
 				} else if (previouslyAddedLevel.getIndentLength() > newSubLevel.getIndentLength()) {
 					currentLevel = previouslyAddedLevel;
 					int diff = previouslyAddedLevel.getIndentLength() - newSubLevel.getIndentLength();
-					
+
 					int j = 0;
 					while (j <= diff) {
 						Level parentLevel = currentLevel.getParent();
@@ -282,10 +276,10 @@ public class SampleView implements IPartView {
 							break;
 						}
 						j = j + (currentLevel.getIndentLength() - parentLevel.getIndentLength());
-						
+
 						currentLevel = parentLevel;
 					}
-					
+
 					tmpLevel = currentLevel;
 				}
 
@@ -303,12 +297,10 @@ public class SampleView implements IPartView {
 
 	private void setInput(Level topLevel) {
 		treeViewer.setRedraw(false);
-		treeViewer.setInput(ParsermodelPackage.eINSTANCE.getLevel_SubLevel(),
-				topLevel);
+		treeViewer.setInput(ParsermodelPackage.eINSTANCE.getLevel_SubLevel(), topLevel);
 		treeViewer.getViewer().expandAll();
 		treeViewer.setRedraw(true);
 	}
-
 
 	@Override
 	public IPartController getController() {

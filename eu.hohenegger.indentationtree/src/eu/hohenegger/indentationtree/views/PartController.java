@@ -18,10 +18,11 @@ import org.eclipse.ui.texteditor.AbstractDecoratedTextEditorPreferenceConstants;
 import eu.hohenegger.indentationtree.Activator;
 import eu.hohenegger.indentationtree.prefs.PreferencePage;
 
-public class PartController implements IPartController { private int tabWidth;
+public class PartController implements IPartController {
+	private int tabWidth;
 	private boolean filterEmptyLines;
 	private SampleView sampleView;
-	
+
 	@Inject
 	public void setFilterEmptyLines(@Preference(nodePath = Activator.PLUGIN_ID) IEclipsePreferences prefs) {
 		filterEmptyLines = prefs.getBoolean(PreferencePage.EDITOR_FILTER_EMPTY_LINES, true);
@@ -43,7 +44,7 @@ public class PartController implements IPartController { private int tabWidth;
 	@Override
 	public void setView(SampleView sampleView) {
 		this.sampleView = sampleView;
-		
+
 	}
 
 	@Override
