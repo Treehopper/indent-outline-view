@@ -45,6 +45,7 @@ public abstract class DIViewPart<T extends IPartView> extends ViewPart {
 	private IEclipseContext ctx;
 
 	public DIViewPart(Class<T> clazz) {
+		super();
 		this.clazz = clazz;
 	}
 
