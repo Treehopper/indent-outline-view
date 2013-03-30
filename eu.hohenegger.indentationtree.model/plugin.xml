@@ -9,7 +9,7 @@
    <extension point="org.eclipse.emf.ecore.generated_package">
       <package
             uri="http://hohenegger.eu/indentationtree"
-            class="parsermodel.ParsermodelPackage"
+            class="eu.hohenegger.indentationtree.parsermodel.ParsermodelPackage"
             genModel="model/parsingmodel.genmodel"/>
    </extension>
 
