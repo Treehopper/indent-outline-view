@@ -71,25 +71,10 @@ public abstract class DIViewPart<T extends IPartView> extends ViewPart {
 		IPropertyChangeListener propertyChangeListener = new IPropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent event) {
-//				IEclipseContext childContext = context.createChild();
-//				childContext.remove(PostConstruct.class);
-//				childContext.remove(Composite.class);
-//				ContextInjectionFactory.invoke(part, Inject.class, context);
-//				ContextInjectionFactory.inject(part, childContext);
-//				IEclipsePreferences preferences = context.get(IEclipsePreferences.class);
 				ContextInjectionFactory.inject(part.getController(), context);
 			}
 		};
 		Activator.getDefault().getPreferenceStore().addPropertyChangeListener(propertyChangeListener); 
-	}
-
-	
-	
-	
-	@Override
-	public void dispose() {
-//		Activator.getDefault().getPreferenceStore().removePropertyChangeListener(propertyChangeListener); //TODO reactivate
-		super.dispose();
 	}
 
 	private Bundle getBundleWithNoInstallState(String bundleName) {
