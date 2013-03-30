@@ -34,8 +34,6 @@ import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeSelection;
-import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -56,6 +54,8 @@ import eu.hohenegger.indentationtree.parsermodel.ParsermodelPackage;
 public class SampleView implements IPartView {
 
 	private Pattern tabsOrSpaces = Pattern.compile("^(\\s|\\t)*");
+	private Pattern emptyLine = Pattern.compile("^$");
+	
 	private EMFContainmentTreeTable treeViewer;
 	private ContainmentRoot root;
 	private AbstractTextEditor currentTextEditor;
@@ -130,25 +130,6 @@ public class SampleView implements IPartView {
 			}
 		};
 		treeViewer.getViewer().addSelectionChangedListener(treeViewerListener);
-		ViewerFilter filter = new ViewerFilter() {
-			Pattern pattern = Pattern.compile("^$");
-			
-			@Override
-			public boolean select(Viewer viewer, Object parentElement, Object element) {
-				return !getController().isEmptyLineSkipped() || match(parentElement) || match(element);
-			}
-			
-			private boolean match(Object element) {
-				if (!(element instanceof Level)) {
-					return false;
-				}
-				
-				Level level = (Level) element;
-				return !pattern.matcher(level.getContent()).matches();
-			}
-			
-		};
-		treeViewer.getViewer().addFilter(filter);
 	}
 
 	@Focus
@@ -277,10 +258,14 @@ public class SampleView implements IPartView {
 				lineInformation = document.getLineInformation(i);
 				String string = document.get(lineInformation.getOffset(),
 						lineInformation.getLength());
+				
+				if (getController().isEmptyLineSkipped() && emptyLine.matcher(string).matches()) {
+					continue;
+				}
 
 				IndentTuple indentTuple = new IndentTuple(string, spaceTab);
 				newSubLevel.setIndentLength(indentTuple.indentLevel);
-				string = /*newSubLevel.getIndentLength() + " " +*/ indentTuple.content;
+				string = indentTuple.content;
 
 				newSubLevel.setContent(string);
 				newSubLevel.setLineNumber(i);
