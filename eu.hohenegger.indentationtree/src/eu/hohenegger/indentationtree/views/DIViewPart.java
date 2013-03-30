@@ -9,6 +9,7 @@
  ******************************************************************************/
 package eu.hohenegger.indentationtree.views;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Iterator;
 
@@ -39,7 +40,7 @@ import eu.hohenegger.indentationtree.Activator;
 public abstract class DIViewPart<T extends IPartView> extends ViewPart {
 	private IEclipseContext context;
 	private Class<T> clazz;
-	protected T part;
+	private T part;
 	private IPropertyChangeListener propertyChangeListener;
 	private IEclipseContext ctx;
 
@@ -53,15 +54,17 @@ public abstract class DIViewPart<T extends IPartView> extends ViewPart {
 		
 		IEclipseContext parentContext = (IEclipseContext) getSite().getService(IEclipseContext.class);
 		if( parentContext.get("org.eclipse.e4.ui.workbench.IPresentationEngine") != null ) {
-			try {
-				Class<?> clazz = getBundleWithNoInstallState("org.eclipse.e4.ui.model.workbench").loadClass("org.eclipse.e4.ui.model.application.ui.basic.MPart");
-				Object instance = getSite().getService(clazz);
-				Method m = clazz.getMethod("getContext", new Class[0]);
-				ctx = (IEclipseContext) m.invoke(instance);
-				context = ctx.createChild();
-			} catch (Exception e) {
-				throw new PartInitException("Could not create context", e);
-			}
+				Class<?> clazz;
+				try {
+					clazz = getBundleWithNoInstallState("org.eclipse.e4.ui.model.workbench").loadClass("org.eclipse.e4.ui.model.application.ui.basic.MPart");
+					Object instance = getSite().getService(clazz);
+					Method m = clazz.getMethod("getContext", new Class[0]);
+					ctx = (IEclipseContext) m.invoke(instance);
+					context = ctx.createChild();
+				} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 		}
 
 		context.declareModifiable(IViewPart.class);
@@ -108,7 +111,13 @@ public abstract class DIViewPart<T extends IPartView> extends ViewPart {
 		return result;
 	}
 
-	public static <F> UnmodifiableIterator<F> emptyIfNull(F[] array) {
+	/**
+	 * Creates a null-safe Iterator.
+	 * 
+	 * @param array The array to be iterated over.
+	 * @return An UnmodifiableIterator, but never null.
+	 */
+	private static <F> UnmodifiableIterator<F> emptyIfNull(F[] array) {
 		if (array != null) {
 			return Iterators.forArray(array);
 		}

@@ -212,8 +212,8 @@ public class SampleView implements IPartView {
 	
 	static final Map<String, IndentTuple> lineToIndentLength = new HashMap<>();
 	private class IndentTuple {
-		int indentLevel;
-		String content;
+		private int indentLevel;
+		private String content;
 		
 		
 		public IndentTuple(String string, String spaceTab) {
