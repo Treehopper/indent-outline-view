@@ -15,6 +15,8 @@ import java.util.Iterator;
 import org.eclipse.e4.core.contexts.ContextInjectionFactory;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.ui.di.Focus;
+import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -31,11 +33,15 @@ import org.osgi.service.packageadmin.PackageAdmin;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.UnmodifiableIterator;
 
+import eu.hohenegger.indentationtree.Activator;
+
 @SuppressWarnings("restriction")
-public abstract class DIViewPart<T> extends ViewPart {
+public abstract class DIViewPart<T extends IPartView> extends ViewPart {
 	private IEclipseContext context;
 	private Class<T> clazz;
 	protected T part;
+	private IPropertyChangeListener propertyChangeListener;
+	private IEclipseContext ctx;
 
 	public DIViewPart(Class<T> clazz) {
 		this.clazz = clazz;
@@ -51,7 +57,7 @@ public abstract class DIViewPart<T> extends ViewPart {
 				Class<?> clazz = getBundleWithNoInstallState("org.eclipse.e4.ui.model.workbench").loadClass("org.eclipse.e4.ui.model.application.ui.basic.MPart");
 				Object instance = getSite().getService(clazz);
 				Method m = clazz.getMethod("getContext", new Class[0]);
-				IEclipseContext ctx = (IEclipseContext) m.invoke(instance);
+				ctx = (IEclipseContext) m.invoke(instance);
 				context = ctx.createChild();
 			} catch (Exception e) {
 				throw new PartInitException("Could not create context", e);
@@ -61,19 +67,45 @@ public abstract class DIViewPart<T> extends ViewPart {
 		context.declareModifiable(IViewPart.class);
 
 		context.set(IViewPart.class, this);
+		
+		IPropertyChangeListener propertyChangeListener = new IPropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent event) {
+//				IEclipseContext childContext = context.createChild();
+//				childContext.remove(PostConstruct.class);
+//				childContext.remove(Composite.class);
+//				ContextInjectionFactory.invoke(part, Inject.class, context);
+//				ContextInjectionFactory.inject(part, childContext);
+//				IEclipsePreferences preferences = context.get(IEclipsePreferences.class);
+				ContextInjectionFactory.inject(part.getController(), context);
+			}
+		};
+		Activator.getDefault().getPreferenceStore().addPropertyChangeListener(propertyChangeListener); 
+	}
+
+	
+	
+	
+	@Override
+	public void dispose() {
+//		Activator.getDefault().getPreferenceStore().removePropertyChangeListener(propertyChangeListener); //TODO reactivate
+		super.dispose();
 	}
 
 	private Bundle getBundleWithNoInstallState(String bundleName) {
 		Bundle result = null;
 		Bundle bundle = FrameworkUtil.getBundle(DIViewPart.class);
 		BundleContext bundleContext = bundle.getBundleContext();
-		ServiceReference serviceReference = bundle.getBundleContext().getServiceReference(PackageAdmin.class);
-		PackageAdmin packageAdmin = (PackageAdmin) bundleContext.getService(serviceReference);
-		
-		Iterator<Bundle> iterator = emptyIfNull(packageAdmin.getBundles(bundleName, null));
+		ServiceReference serviceReference = bundle.getBundleContext()
+				.getServiceReference(PackageAdmin.class);
+		PackageAdmin packageAdmin = (PackageAdmin) bundleContext
+				.getService(serviceReference);
+
+		Iterator<Bundle> iterator = emptyIfNull(packageAdmin.getBundles(
+				bundleName, null));
 		while (iterator.hasNext()) {
 			Bundle tmpBundle = (Bundle) iterator.next();
-			
+
 			int bundleState = tmpBundle.getState();
 			if (!(bundleState == Bundle.INSTALLED || bundleState == Bundle.UNINSTALLED)) {
 				result = tmpBundle;
@@ -83,7 +115,7 @@ public abstract class DIViewPart<T> extends ViewPart {
 
 		return result;
 	}
-	
+
 	public static <F> UnmodifiableIterator<F> emptyIfNull(F[] array) {
 		if (array != null) {
 			return Iterators.forArray(array);
@@ -100,7 +132,7 @@ public abstract class DIViewPart<T> extends ViewPart {
 			}
 		};
 	}
-	
+
 	@Override
 	public void createPartControl(Composite parent) {
 		Composite comp = new Composite(parent, SWT.NONE);
@@ -110,9 +142,9 @@ public abstract class DIViewPart<T> extends ViewPart {
 
 		context.set(Composite.class, comp);
 		part = ContextInjectionFactory.make(clazz, context);
-		
+
 	}
-	
+
 	protected IEclipseContext getContext() {
 		return context;
 	}

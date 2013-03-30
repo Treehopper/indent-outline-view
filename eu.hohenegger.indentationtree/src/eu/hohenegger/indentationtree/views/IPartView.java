@@ -9,9 +9,7 @@
  ******************************************************************************/
 package eu.hohenegger.indentationtree.views;
 
-
-public class SampleViewWrapper extends DIViewPart<SampleView> {
-	public SampleViewWrapper() {
-		super(SampleView.class);
-	}
+public interface IPartView {
+	IPartController getController();
+	void refreshInput();
 }

@@ -18,8 +18,8 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.e4.core.di.extensions.Preference;
+import org.eclipse.e4.core.contexts.ContextInjectionFactory;
+import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.services.IServiceConstants;
@@ -34,13 +34,14 @@ import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeSelection;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.internal.e4.compatibility.CompatibilityEditor;
-import org.eclipse.ui.texteditor.AbstractDecoratedTextEditorPreferenceConstants;
 import org.eclipse.ui.texteditor.AbstractTextEditor;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.IElementStateListener;
@@ -52,7 +53,7 @@ import eu.hohenegger.indentationtree.parsermodel.ParsermodelFactory;
 import eu.hohenegger.indentationtree.parsermodel.ParsermodelPackage;
 
 @SuppressWarnings("restriction")
-public class SampleView {
+public class SampleView implements IPartView {
 
 	private Pattern tabsOrSpaces = Pattern.compile("^(\\s|\\t)*");
 	private EMFContainmentTreeTable treeViewer;
@@ -61,10 +62,20 @@ public class SampleView {
 	private IDocument currentDocument;
 	private IElementStateListener currentEditorStateListener;
 	private MPart currentEditorPart;
-	private int tabWidth;
+	
+	@Inject
+	private IEclipseContext context;
+	private IPartController controller;
 	
 	@Inject 
 	private EPartService partService;
+	
+	
+	@Inject 
+	public SampleView() {
+		controller = ContextInjectionFactory.make(PartController.class, context);
+		controller.setView(this);
+	}
 	
 	@Inject
 	public void setActivePart(@Named(IServiceConstants.ACTIVE_PART) MPart activePart) {
@@ -119,6 +130,25 @@ public class SampleView {
 			}
 		};
 		treeViewer.getViewer().addSelectionChangedListener(treeViewerListener);
+		ViewerFilter filter = new ViewerFilter() {
+			Pattern pattern = Pattern.compile("^$");
+			
+			@Override
+			public boolean select(Viewer viewer, Object parentElement, Object element) {
+				return !getController().isEmptyLineSkipped() || match(parentElement) || match(element);
+			}
+			
+			private boolean match(Object element) {
+				if (!(element instanceof Level)) {
+					return false;
+				}
+				
+				Level level = (Level) element;
+				return !pattern.matcher(level.getContent()).matches();
+			}
+			
+		};
+		treeViewer.getViewer().addFilter(filter);
 	}
 
 	@Focus
@@ -126,6 +156,17 @@ public class SampleView {
 		treeViewer.getViewer().getTree().setFocus();
 	}
 
+	@Override
+	public void refreshInput() {
+		if (currentTextEditor == null) {
+			return;
+		}
+		IDocumentProvider documentProvider = currentTextEditor.getDocumentProvider();
+		IEditorInput editorInput = currentTextEditor.getEditorInput();
+		final IDocument document = documentProvider.getDocument(editorInput);
+		setInput(parse(document));
+	}
+	
 	public void editorActivated(IEditorPart activePart) {
 		if (!(activePart instanceof AbstractTextEditor)) {
 			return;
@@ -146,9 +187,7 @@ public class SampleView {
 				if (isDirty) {
 					return;
 				}
-				IDocumentProvider documentProvider = currentTextEditor.getDocumentProvider();
-				final IDocument document = documentProvider.getDocument(element);
-				setInput(parse(document));
+				refreshInput();
 			}
 
 			@Override
@@ -181,13 +220,8 @@ public class SampleView {
 		currentTextEditor.getDocumentProvider().removeElementStateListener(currentEditorStateListener);
 		treeViewer.getViewer().setInput(null);
 	}
-	
-	@Inject
-	public void setTabWidth(@Preference(nodePath = "org.eclipse.ui.editors.general") IEclipsePreferences prefs) {
-		tabWidth = prefs.getInt(AbstractDecoratedTextEditorPreferenceConstants.EDITOR_TAB_WIDTH, 4);
-	}
 
-	private String translateTabsToSpaces() {
+	private String translateTabsToSpaces(int tabWidth) {
 		String spaceTab = "";
 		for (int i = 0; i < tabWidth; i++) {
 			spaceTab = spaceTab + " ";
@@ -222,7 +256,7 @@ public class SampleView {
 	}
 	
 	private Level parse(IDocument document) {
-		String spaceTab = translateTabsToSpaces();
+		String spaceTab = translateTabsToSpaces(getController().getTabWidth());
 		
 		root = ParsermodelFactory.eINSTANCE.createContainmentRoot();
 		root.setTopLevel(ParsermodelFactory.eINSTANCE.createLevel());
@@ -288,5 +322,11 @@ public class SampleView {
 				topLevel);
 		treeViewer.getViewer().expandAll();
 		treeViewer.setRedraw(true);
+	}
+
+
+	@Override
+	public IPartController getController() {
+		return controller;
 	}
 }

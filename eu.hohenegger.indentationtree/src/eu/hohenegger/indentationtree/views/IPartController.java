@@ -9,9 +9,10 @@
  ******************************************************************************/
 package eu.hohenegger.indentationtree.views;
 
+public interface IPartController {
+	void setView(SampleView sampleView);
 
-public class SampleViewWrapper extends DIViewPart<SampleView> {
-	public SampleViewWrapper() {
-		super(SampleView.class);
-	}
+	int getTabWidth();
+	
+	boolean isEmptyLineSkipped();
 }
