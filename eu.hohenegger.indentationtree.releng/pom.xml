@@ -1,0 +1,62 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>eu.hohenegger.indentationtree</groupId>
+  <artifactId>parent</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <modules>
+    <module>../eu.hohenegger.indentationtree.feature</module>
+    <module>../eu.hohenegger.indentationtree.p2updatesite</module>
+    <module>../eu.hohenegger.indentationtree</module>
+    <module>../eu.hohenegger.indentationtree.model</module>
+    <module>../eu.hohenegger.indentationtree.model.edit</module>
+  </modules>
+
+  <properties>
+    <tycho-version>0.16.0</tycho-version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <!-- add Juno repository to resolve dependencies -->
+  <repositories>
+    <repository>
+      <id>juno</id>
+      <layout>p2</layout>
+      <url>http://download.eclipse.org/releases/juno</url>
+    </repository>
+    <repository>
+      <id>emfviewer</id>
+      <layout>p2</layout>
+      <url>http://p2.hohenegger.eu/eu.hohenegger.emfviewer</url>
+    </repository>
+    
+  </repositories>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.eclipse.tycho</groupId>
+        <artifactId>tycho-maven-plugin</artifactId>
+        <version>${tycho-version}</version>
+        <extensions>true</extensions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.eclipse.tycho</groupId>
+        <artifactId>tycho-p2-director-plugin</artifactId>
+        <version>${tycho-version}</version>
+        <executions>
+          <execution>
+            <id>archive-products</id>
+            <goals>
+              <goal>archive-products</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+</project> 

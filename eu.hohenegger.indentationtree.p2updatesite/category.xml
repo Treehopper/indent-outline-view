@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/eu.hohenegger.indentationtree.feature_1.0.0.qualifier.jar" id="eu.hohenegger.indentationtree.feature" version="1.0.0.qualifier">
+      <category name="eu.hohenegger.indentationtree"/>
+   </feature>
+   <category-def name="eu.hohenegger.indentationtree" label="Indentation Tree"/>
+</site>
