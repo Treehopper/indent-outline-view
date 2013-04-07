@@ -6,3 +6,4 @@
 3. Run 'mvn clean install' from within releng-repository
 4. Find repository-folder in p2updatesite-project
 5. Commit changes
+6. Deploy: 'mvn install -P uploadRepo'
