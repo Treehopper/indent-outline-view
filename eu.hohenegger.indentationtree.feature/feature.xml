@@ -4,8 +4,13 @@
       label="Feature"
       version="1.0.0.qualifier">
 
-   <description url="http://www.example.com/description">
-      [Enter Feature Description here.]
+   <description url="https://github.com/Treehopper/SimpleEclipseViewer">
+      JFaces TreeViewer, TableViewer and TreeTable are powerful controls, but for creating a viewer with advanced features such as:
+
+incremental pattern filter with highlighting,
+drag and drop with auto-expand, etc. or
+icon decoration
+the API makes you jump through hoops. Especially if you want to use such features in combination. SimpleEclipseViewer tries to fix this.
    </description>
 
    <copyright url="http://www.hohenegger.eu">
@@ -211,6 +216,10 @@ Agreement more than one year after the cause of action arose.
 Each party waives its rights to a jury trial in any resulting
 litigation.
    </license>
+
+   <url>
+      <discovery label="EMF Viewer" url="http://p2.hohenegger.eu/eu.hohenegger.emfviewer"/>
+   </url>
 
    <plugin
          id="eu.hohenegger.indentationtree"
