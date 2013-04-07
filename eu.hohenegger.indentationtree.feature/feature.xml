@@ -221,6 +221,10 @@ litigation.
       <discovery label="EMF Viewer" url="http://p2.hohenegger.eu/eu.hohenegger.emfviewer"/>
    </url>
 
+   <requires>
+      <import plugin="eu.hohenegger.emfviewer"/>
+   </requires>
+
    <plugin
          id="eu.hohenegger.indentationtree"
          download-size="0"
