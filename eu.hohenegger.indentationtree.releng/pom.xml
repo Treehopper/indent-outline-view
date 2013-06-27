@@ -12,6 +12,7 @@
 		<module>../eu.hohenegger.indentationtree</module>
 		<module>../eu.hohenegger.indentationtree.model</module>
 		<module>../eu.hohenegger.indentationtree.model.edit</module>
+		<module>../eu.hohenegger.identationtree.releng.targetplatform</module>
 	</modules>
 
 	<properties>
@@ -19,7 +20,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
-	<!-- add Juno repository to resolve dependencies -->
+	<!-- add Juno repository to resolve dependencies>
 	<repositories>
 		<repository>
 			<id>juno</id>
@@ -31,7 +32,7 @@
 			<layout>p2</layout>
 			<url>http://p2.hohenegger.eu/eu.hohenegger.emfviewer</url>
 		</repository>
-	</repositories>
+	</repositories -->
 
 	<build>
 		<plugins>
