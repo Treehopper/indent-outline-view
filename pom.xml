@@ -12,7 +12,7 @@
 		<module>eu.hohenegger.indentationtree</module>
 		<module>eu.hohenegger.indentationtree.model</module>
 		<module>eu.hohenegger.indentationtree.model.edit</module>
-		<module>eu.hohenegger.identationtree.releng.targetplatform</module>
+		<module>eu.hohenegger.indentationtree.releng.targetplatform</module>
 	</modules>
 
 	<properties>
@@ -30,7 +30,7 @@
 					<target>
 						<artifact>
 							<groupId>eu.hohenegger.indentationtree</groupId>
-							<artifactId>eu.hohenegger.identationtree.releng.targetplatform</artifactId>
+							<artifactId>eu.hohenegger.indentationtree.releng.targetplatform</artifactId>
 							<version>0.0.1-SNAPSHOT</version>
 						</artifact>
 					</target>
