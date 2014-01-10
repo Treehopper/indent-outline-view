@@ -7,12 +7,12 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>.eu.hohenegger.indentationtree.feature</module>
-		<module>.eu.hohenegger.indentationtree.p2updatesite</module>
-		<module>.eu.hohenegger.indentationtree</module>
-		<module>.eu.hohenegger.indentationtree.model</module>
-		<module>.eu.hohenegger.indentationtree.model.edit</module>
-		<module>.eu.hohenegger.identationtree.releng.targetplatform</module>
+		<module>eu.hohenegger.indentationtree.feature</module>
+		<module>eu.hohenegger.indentationtree.p2updatesite</module>
+		<module>eu.hohenegger.indentationtree</module>
+		<module>eu.hohenegger.indentationtree.model</module>
+		<module>eu.hohenegger.indentationtree.model.edit</module>
+		<module>eu.hohenegger.identationtree.releng.targetplatform</module>
 	</modules>
 
 	<properties>
