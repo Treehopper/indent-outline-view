@@ -1,5 +1,3 @@
-![Travis CI](https://travis-ci.org/Treehopper/indent-outline-view.png?branch=master "Build Status")
-
 indent-outline-view
 ===================
 This Eclipse Indent Outline View links itself to the active text editor in the Eclipse IDE, and shows it's content as a tree by using the indentation of the editors content as tree structure.
@@ -7,6 +5,10 @@ This Eclipse Indent Outline View links itself to the active text editor in the E
 Install from p2 update site
 ===================
 http://p2.hohenegger.eu/eu.hohenegger.indentationtree
+
+Build Status
+===================
+![Travis CI](https://travis-ci.org/Treehopper/indent-outline-view.png?branch=master "Build Status")
 
 License
 ===================
