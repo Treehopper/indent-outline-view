@@ -3,7 +3,6 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <relativePath>..</relativePath>
     <groupId>eu.hohenegger.indentationtree</groupId>
     <artifactId>parent</artifactId>
     <version>1.0.0-SNAPSHOT</version>
