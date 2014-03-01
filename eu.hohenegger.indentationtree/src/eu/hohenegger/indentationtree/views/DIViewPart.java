@@ -92,7 +92,7 @@ public abstract class DIViewPart<T extends IPartView> extends ViewPart {
 		Bundle result = null;
 		Bundle bundle = FrameworkUtil.getBundle(DIViewPart.class);
 		BundleContext bundleContext = bundle.getBundleContext();
-		ServiceReference serviceReference = bundle.getBundleContext().getServiceReference(PackageAdmin.class);
+		ServiceReference<PackageAdmin> serviceReference = bundle.getBundleContext().getServiceReference(PackageAdmin.class);
 		PackageAdmin packageAdmin = (PackageAdmin) bundleContext.getService(serviceReference);
 
 		Iterator<Bundle> iterator = emptyIfNull(packageAdmin.getBundles(bundleName, null));
