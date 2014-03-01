@@ -36,7 +36,6 @@ import com.google.common.collect.UnmodifiableIterator;
 
 import eu.hohenegger.indentationtree.Activator;
 
-@SuppressWarnings("restriction")
 public abstract class DIViewPart<T extends IPartView> extends ViewPart {
 	private IEclipseContext context;
 	private Class<T> clazz;

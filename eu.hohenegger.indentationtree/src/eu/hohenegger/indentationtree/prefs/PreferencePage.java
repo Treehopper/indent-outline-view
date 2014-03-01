@@ -16,7 +16,7 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 
 import eu.hohenegger.indentationtree.Activator;
 
-public class PreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
+public final class PreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 	public static final String EDITOR_FILTER_EMPTY_LINES = "EDITOR_FILTER_EMPTY_LINES";
 
 	public PreferencePage() {

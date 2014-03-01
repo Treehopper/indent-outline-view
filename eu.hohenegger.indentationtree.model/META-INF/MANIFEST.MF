@@ -7,10 +7,12 @@ Bundle-ClassPath: .
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Export-Package: 
- eu.hohenegger.indentationtree.parsermodel,
+Export-Package: eu.hohenegger.indentationtree.parsermodel,
  eu.hohenegger.indentationtree.parsermodel.impl,
  eu.hohenegger.indentationtree.parsermodel.util
 Require-Bundle: org.eclipse.core.runtime,
- org.eclipse.emf.ecore;visibility:=reexport
+ org.eclipse.emf.ecore;visibility:=reexport,
+ org.eclipse.emf.ecore.xcore.lib,
+ org.eclipse.xtext.xbase.lib
 Bundle-ActivationPolicy: lazy
+

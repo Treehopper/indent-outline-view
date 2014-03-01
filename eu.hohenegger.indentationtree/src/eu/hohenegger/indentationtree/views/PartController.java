@@ -18,7 +18,7 @@ import org.eclipse.ui.texteditor.AbstractDecoratedTextEditorPreferenceConstants;
 import eu.hohenegger.indentationtree.Activator;
 import eu.hohenegger.indentationtree.prefs.PreferencePage;
 
-public class PartController implements IPartController {
+public final class PartController implements IPartController {
 	private int tabWidth;
 	private boolean filterEmptyLines;
 	private SampleView sampleView;
