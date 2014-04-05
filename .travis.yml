@@ -1,7 +1,0 @@
-language: java
-notifications:
-  email:
-    recipients:
-      - travis-ci.org-indent-outline-view@hohenegger.eu
-    on_success: change
-    on_failure: always
