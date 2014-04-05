@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="Eclipse Kepler" sequenceNumber="30">
+<?pde version="3.8"?><target name="Eclipse Kepler" sequenceNumber="31">
 <locations>
-<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="eu.hohenegger.emfviewer.feature.feature.group" version="1.0.0.201304071053"/>
-<repository location="http://p2.hohenegger.eu/eu.hohenegger.emfviewer"/>
-</location>
 <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="com.google.guava" version="15.0.0.v201402241730"/>
 <repository location="http://download.eclipse.org/tools/orbit/downloads/drops/S20140227085123/repository/"/>
@@ -18,6 +14,10 @@
 <unit id="org.eclipse.emf.ecore.xcore.sdk.feature.group" version="1.1.1.v20130903-0948"/>
 <unit id="org.eclipse.emf.sdk.feature.group" version="2.9.2.v20140203-1126"/>
 <repository location="http://download.eclipse.org/releases/kepler"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="eu.hohenegger.emfviewer.feature.feature.group" version="1.0.0.201404051340"/>
+<repository location="http://treehopper.github.io/SimpleEclipseViewer/"/>
 </location>
 </locations>
 <targetJRE path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
