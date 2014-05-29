@@ -10,7 +10,7 @@
 package eu.hohenegger.indentationtree.views;
 
 public interface IPartController {
-	void setView(SampleView sampleView);
+	void setView(IndentOutlineView sampleView);
 
 	int getTabWidth();
 

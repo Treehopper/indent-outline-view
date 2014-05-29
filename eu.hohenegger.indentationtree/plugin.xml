@@ -4,13 +4,14 @@
 
    <extension
          point="org.eclipse.ui.views">
-      <view
-            name="Indent Outline"
-            icon="icons/sample.gif"
+      <e4view
             category="org.eclipse.ui"
-            class="eu.hohenegger.indentationtree.views.SampleViewWrapper"
-            id="eu.hohenegger.indentationtree.views.SampleViewWrapper">
-      </view>
+            class="eu.hohenegger.indentationtree.views.IndentOutlineView"
+            icon="icons/sample.gif"
+            id="eu.hohenegger.indentationtree.views.IndentOutlineView"
+            name="Indent Outline"
+            restorable="true">
+      </e4view>
    </extension>
    <extension
          point="org.eclipse.ui.preferencePages">

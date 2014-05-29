@@ -21,7 +21,7 @@ import eu.hohenegger.indentationtree.prefs.PreferencePage;
 public final class PartController implements IPartController {
 	private int tabWidth;
 	private boolean filterEmptyLines;
-	private SampleView sampleView;
+	private IndentOutlineView sampleView;
 
 	@Inject
 	public void setFilterEmptyLines(@Preference(nodePath = Activator.PLUGIN_ID) IEclipsePreferences prefs) {
@@ -42,7 +42,7 @@ public final class PartController implements IPartController {
 	}
 
 	@Override
-	public void setView(SampleView sampleView) {
+	public void setView(IndentOutlineView sampleView) {
 		this.sampleView = sampleView;
 
 	}
