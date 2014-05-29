@@ -2,7 +2,7 @@
 <feature
       id="eu.hohenegger.indentationtree.feature"
       label="Indentation Tree Core"
-      version="1.0.0.qualifier">
+      version="1.1.0.qualifier">
 
    <description url="https://github.com/Treehopper/SimpleEclipseViewer">
       JFaces TreeViewer, TableViewer and TreeTable are powerful controls, but for creating a viewer with advanced features such as:
